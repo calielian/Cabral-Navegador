@@ -1,0 +1,3 @@
+vá pra onde tá o pom.xml e escreva mvn clean package no terminal
+
+vá para a pasta target e rode o que não tem original no nome
