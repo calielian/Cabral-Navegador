@@ -1,57 +1,76 @@
 package com.cabral.navegador;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
+import java.util.List;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.equo.chromium.ChromiumBrowser;
 
 public class TratamentoURL {
 
     public static String pegarPaginaInicial(){
-        try (BufferedReader leitor = new BufferedReader(new InputStreamReader(TratamentoURL.class.getResourceAsStream("/assets/home.txt")))) {
-            return leitor.readLine();
-        } catch (Exception e) {
+
+        try {
+            // pega o caminho do arquivo de configuração
+            Path caminhoArquivoConfig = Paths.get(System.getProperty("user.home"), Main.NOME_PASTA_CONFIG, Main.NOME_ARQUIVO_CONFIGURACAO);
+
+            // cria uma lista de strings que contém todas as linhas lidas do arquivo
+            List<String> linhas = Files.readAllLines(caminhoArquivoConfig);
+
+            // itera pela lista e verifica se possui a linha relacionada a página inicial
+            for (String linha : linhas){
+                if (linha.contains("PAG_INICIAL=")){
+                    return linha.split("PAG_INICIAL=")[1];
+                }
+            }
+
+            return "https://www.google.com/";
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
             return "";
         }
     }
 
     public static boolean verificarSeEFavorito(String link){
 
-        System.out.println(link);
+        // verifica se a página é favorito ou não
 
-        try (BufferedReader leitor = new BufferedReader(new FileReader("/home/ian/Downloads/favorito.txt"))) {
+        try {
+            Path caminhoArquivoConfig = Paths.get(System.getProperty("user.home"), Main.NOME_PASTA_CONFIG, Main.NOME_ARQUIVO_FAVORITOS);
+            List<String> linhas = Files.readAllLines(caminhoArquivoConfig);
 
-            String linha;
-
-            while ((linha = leitor.readLine()) != null) {
-                System.out.print(linha);
-                System.out.print(link);
-                if (linha.equals(link)){
+            for (String linha : linhas){
+                if (linha.contains(link)){
                     System.out.println("O link está favoritado");
                     Botoes.definirIconeBotaoFavoritos(true);
                     return true;
                 }
             }
+
             System.out.println("O link não está favoritado");
             return false;
-
         } catch (Exception e) {
-            System.err.println(e);
+            System.err.println(e.getMessage());
             return false;
         }
     }
 
     public static void adicionarFavorito(ChromiumBrowser browser){
 
+        // adiciona a página aos favoritos
         if (!verificarSeEFavorito(browser.getUrl())){
-            try (FileWriter escritor = new FileWriter("/home/ian/Downloads/favorito.txt", true)) {
-                escritor.append(browser.getUrl() + "\n");
-                Botoes.definirIconeBotaoFavoritos(browser.getUrl());
+            try {
+                Path caminhoArquivoConfig = Paths.get(System.getProperty("user.home"), Main.NOME_PASTA_CONFIG, Main.NOME_ARQUIVO_FAVORITOS);
+                List<String> url = List.of(browser.getUrl(), "\n");
+
+                Files.write(caminhoArquivoConfig, url);
+                Botoes.definirIconeBotaoFavoritos(true);
+
                 System.out.println("Adicionou o favorito com sucesso");
-            } catch (Exception e) {
-                System.err.println(e);
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
             }
         }
 

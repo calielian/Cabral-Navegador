@@ -12,6 +12,7 @@ import com.equo.chromium.ChromiumBrowser;
 
 public class Botoes extends JButton {
 
+    // cria os ícones dos botões
     private static ImageIcon botaoProximoIcon = new ImageIcon(Botoes.class.getResource("/assets/botaoProximo.png"));
     private static ImageIcon botaoPrevioIcon = new ImageIcon(Botoes.class.getResource("/assets/botaoPrevio.png"));
     private static ImageIcon naoFavorito = new ImageIcon(Botoes.class.getResource("/assets/naoFavorito.png"));
@@ -19,17 +20,20 @@ public class Botoes extends JButton {
     private static ImageIcon botaoRecarregarIcon = new ImageIcon(Botoes.class.getResource("/assets/botaoRecarregar.png"));
     private static ImageIcon botaoConfigIcon = new ImageIcon(Botoes.class.getResource("/assets/botaoConfig.png"));
 
+    // cria os botões e define a cor padrão deles
     private static JButton botaoPrevio = new JButton();
     private static JButton botaoProximo = new JButton();
     private static JButton botaoFavoritos = new JButton();
     private static JButton botaoRecarregar = new JButton();
     private static JButton botaoConfig = new JButton();
-    private static Color corBotao = Color.LIGHT_GRAY;
+    private static final Color corBotao = Color.LIGHT_GRAY;
 
+    // cria variáveis e uma constante que são necessárias para o uso do programa
     public static ChromiumBrowser browser;
     public static JTextField barraURL;
     public static final int LARGURA = 50;
 
+    // as funções abaixo configuram e entregam os botões
     public static JButton pegarBotaoPrevio(int altura){
         botaoPrevio.setPreferredSize(new Dimension(LARGURA, altura));
         botaoPrevio.setBackground(corBotao);
@@ -79,10 +83,12 @@ public class Botoes extends JButton {
         return botaoConfig;
     }
 
+    // função que entrega a cor dos botões
     public static Color pegarCorBotao(){
         return corBotao;
     }
 
+    // as duas funções abaixo define o ícone do botão de favoritos
     public static void definirIconeBotaoFavoritos(String link){
         botaoFavoritos.setIcon(TratamentoURL.verificarSeEFavorito(link) ? favorito : naoFavorito);
     }
@@ -91,6 +97,7 @@ public class Botoes extends JButton {
         botaoFavoritos.setIcon(efavorito ? favorito : naoFavorito);
     }
 
+    // função de tratamento do clique nos botões
     private static void botaoSelecionado(ActionEvent evento){
         
         if (evento.getSource() == botaoProximo){
@@ -122,6 +129,7 @@ public class Botoes extends JButton {
         }
     }
 
+    // essa função para o processo, para esperar
     private static void esperar(){
         try {
             Thread.sleep(500);
