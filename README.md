@@ -12,4 +12,4 @@ Como ferramenta de build, foi utilizado o Apache Maven.
 ```java -version```<br>
 ```mvn -v```
 
-Aos serem executados, você deve ver a versão do Java e do Maven, respectivamente. Se não aparecer nada, instale o JRE (Java) e o Maven.
+Aos serem executados, você deve ver a versão do Java e do Maven, respectivamente. Se não aparecer nada, instale o JDK (Java) e o Maven.
