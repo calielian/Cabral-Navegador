@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import com.equo.chromium.ChromiumBrowser;
 
@@ -62,10 +63,10 @@ public class TratamentoURL {
         // adiciona a página aos favoritos
         if (!verificarSeEFavorito(browser.getUrl())){
             try {
-                Path caminhoArquivoConfig = Paths.get(System.getProperty("user.home"), Main.NOME_PASTA_CONFIG, Main.NOME_ARQUIVO_FAVORITOS);
-                List<String> url = List.of(browser.getUrl(), "\n");
+                Path caminhoArquivoFav = Paths.get(System.getProperty("user.home"), Main.NOME_PASTA_CONFIG, Main.NOME_ARQUIVO_FAVORITOS);
+                List<String> url = List.of(browser.getUrl());
 
-                Files.write(caminhoArquivoConfig, url);
+                Files.write(caminhoArquivoFav, url, StandardOpenOption.APPEND);
                 Botoes.definirIconeBotaoFavoritos(true);
 
                 System.out.println("Adicionou o favorito com sucesso");
@@ -74,6 +75,31 @@ public class TratamentoURL {
             }
         }
 
+    }
+
+    public static String[] pegarFavoritos(){
+
+        // retorna a lista de favoritos
+        List<String> listaFavoritosArquivo;
+
+        try {
+            Path caminhoArquivoFav = Paths.get(System.getProperty("user.home"), Main.NOME_PASTA_CONFIG, Main.NOME_ARQUIVO_FAVORITOS);
+
+            listaFavoritosArquivo = Files.readAllLines(caminhoArquivoFav);
+
+            String[] listaFavoritos = new String[listaFavoritosArquivo.size()];
+
+            for (int i = 0; i < listaFavoritosArquivo.size(); i++){
+                listaFavoritos[i] = listaFavoritosArquivo.get(i);
+            }
+
+            System.out.println("Favoritos pegos com sucesso");
+            return listaFavoritos;
+        } catch (IOException e) {
+            String[] listaFavoritos = {"Não foi possível ler os arquivo de favoritos"};
+            System.err.println(e.getMessage());
+            return listaFavoritos;
+        }
     }
 
 }

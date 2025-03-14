@@ -6,8 +6,11 @@ import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import com.equo.chromium.ChromiumBrowser;
@@ -16,10 +19,16 @@ public class JanelaPrincipal extends JFrame {
 
     private final int TAMANHO_BARRA_NAVEGACAO = 35;
 
+    // menu popup
+    private JPopupMenu menu = new JPopupMenu();
+
+    // botão para abrir o popup menu
+    private JButton botaoExtras = Botoes.pegarBotaoExtras(TAMANHO_BARRA_NAVEGACAO);
+
     JanelaPrincipal(){
 
         // Inicia a janela principal do navegador
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setMinimumSize(new Dimension(500, 500));
         this.setLayout(new BorderLayout());
         this.setSize(1200, 600);
@@ -34,6 +43,16 @@ public class JanelaPrincipal extends JFrame {
         JPanel visualizadorSite = new JPanel();
         JPanel botoesNavegacao = new JPanel();
         JPanel botoesFavConfig = new JPanel();
+
+        // cria os itens do menu popup
+        JMenuItem configuracoes = new JMenuItem("Configurações");
+        configuracoes.addActionListener(e -> menuConfig());
+
+        JMenuItem favoritos = new JMenuItem("Favoritos");
+        favoritos.addActionListener(e -> menuFavoritos());
+
+        // configura o botão para a função de exibir o menu
+        botaoExtras.addActionListener(e -> exibirPopupMenu());
         
         // cria e configura a barra de URL
         JTextField barraURL = new JTextField();
@@ -64,20 +83,26 @@ public class JanelaPrincipal extends JFrame {
         botoesNavegacao.add(Botoes.pegarBotaoRecarregar(TAMANHO_BARRA_NAVEGACAO), BorderLayout.EAST);
 
         botoesFavConfig.add(Botoes.pegarBotaoFavoritos(TAMANHO_BARRA_NAVEGACAO), BorderLayout.WEST);
-        botoesFavConfig.add(Botoes.pegarBotaoConfig(TAMANHO_BARRA_NAVEGACAO), BorderLayout.EAST);
+        botoesFavConfig.add(botaoExtras, BorderLayout.EAST);
 
         barraNavegacao.add(botoesNavegacao, BorderLayout.WEST);
         barraNavegacao.add(botoesFavConfig, BorderLayout.EAST);
         barraNavegacao.add(barraURL, BorderLayout.CENTER);
 
+        menu.add(configuracoes);
+        menu.add(favoritos);
+
         // deixa a janela principal visível
         this.add(barraNavegacao, BorderLayout.NORTH);
         this.add(visualizadorSite);
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
 
-        // entrega as instâncias da barra de URL e do navegador pra classe "Botoes"
+        // entrega as instâncias da barra de URL e do navegador
         Botoes.browser = browser;
         Botoes.barraURL = barraURL;
+        JanelaFavoritos.barraUrl = barraURL;
+        JanelaFavoritos.browser = browser;
 
         // define a fonte da barra de URL para o tamanho 18, insere o URL da página inicial na barra e verifica se a página é favorita ou não
         barraURL.setFont(new Font(getFont().getFamily(), Font.PLAIN, 18));
@@ -99,4 +124,32 @@ public class JanelaPrincipal extends JFrame {
         Botoes.definirIconeBotaoFavoritos(barraURL.getText());
     }
 
+    // abre o menu de configurações
+    private void menuConfig(){
+        new JanelaConfig();
+    }
+
+    // abre o nenu de favoritos
+    private void menuFavoritos(){
+        new JanelaFavoritos();
+    }
+
+    // função para exibir o menu
+    private void exibirPopupMenu(){
+        // Coordenadas relativas ao botão
+        int coordenadaXRelativaBotao = 0; // é 0 porque em relação ao botão, ele está na posição 0
+        int coordenadaYRelativaBotao = botaoExtras.getHeight();
+
+        int coordenadaXAbsolutaBotao = botaoExtras.getLocationOnScreen().x; // pega a localização absoluta do botão na tela no eixo X (horizontal)
+
+        int limite = this.getLocationOnScreen().x + this.getWidth(); // a localização absoluta da janela na tela no eixo X (horizontal) + a largura da janela faz com que se descubra qual o limite de onde o menu pode aparecer
+        // sem a localização, não terá o ponto de referência de onde o menu deve ficar, fazendo com que respeite o tamanho da janela, mas não onde ela está
+
+        if (coordenadaXAbsolutaBotao + menu.getPreferredSize().width > limite) {
+            coordenadaXRelativaBotao = botaoExtras.getWidth() - menu.getPreferredSize().width; // subtrai a largura do botão com a largura do menu, fazendo com que o menu vá para a esquerda e não fique nenhuma parte pra fora
+        }
+
+        // Exibe o menu com tudo correto
+        menu.show(botaoExtras, coordenadaXRelativaBotao, coordenadaYRelativaBotao);
+    }
 }

@@ -2,7 +2,6 @@ package com.cabral.navegador;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,37 +23,45 @@ public class JanelaConfig extends JFrame {
         ImageIcon icon = new ImageIcon(getClass().getResource("/assets/IconeNavegador.png"));
 
         // inicia a janela de configurações
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(new Dimension(700, 400));
         this.setResizable(false);
         this.setTitle("Configurações");
         this.setIconImage(icon.getImage());
 
-        // cria e configura o campo de texto da página inicial
-        JTextField paginaInicial = new JTextField();
-        paginaInicial.setBackground(Color.LIGHT_GRAY);
-        paginaInicial.setPreferredSize(new Dimension(600, 18));
-        paginaInicial.addActionListener(e -> definirPaginaInicial(paginaInicial));
+        // cria e configura o painel onde estará as configurações
+        JPanel painelConfig = new JPanel();
+        painelConfig.setLayout(new BoxLayout(painelConfig, BoxLayout.Y_AXIS));
 
         // cria e configura o campo de texto da página inicial
         JLabel paginaInicialLabel = new JLabel("Página inicial: ");
 
+        // cria e configura o campo de texto da página inicial
+        JTextField paginaInicialCampo = new JTextField();
+        paginaInicialCampo.setBackground(Color.LIGHT_GRAY);
+        paginaInicialCampo.setMaximumSize(new Dimension(this.getWidth(), 20)); // tamanho máximo para garantir que fique na mesma linha
+        paginaInicialCampo.addActionListener(e -> definirPaginaInicial(paginaInicialCampo));
+
         // cria e configura o painel onde estará as configurações relacionadas a página inicial
         JPanel paginaInicialPanel = new JPanel();
-        paginaInicialPanel.setLayout(new FlowLayout(FlowLayout.LEADING));
+        paginaInicialPanel.setLayout(new BoxLayout(paginaInicialPanel, BoxLayout.X_AXIS));
 
-        // adiciona os componentes ao painel
+        // adiciona os componentes aos seus respectivos painéis
         paginaInicialPanel.add(paginaInicialLabel);
-        paginaInicialPanel.add(paginaInicial);
+        paginaInicialPanel.add(paginaInicialCampo);
+
+        painelConfig.add(paginaInicialPanel);
 
         // deixa a janela de configurações visível
-        this.add(paginaInicialPanel);
+        this.add(painelConfig);
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
-    private void definirPaginaInicial(JTextField paginaIncial){
+    // função para definir a página inicial
+    private void definirPaginaInicial(JTextField paginaInicialCampo){
 
-        String urlDigitada = paginaIncial.getText();
+        String urlDigitada = paginaInicialCampo.getText();
 
         boolean comecaComHTTPS = false;
 
@@ -69,7 +77,7 @@ public class JanelaConfig extends JFrame {
             urlDigitada = "http://" + urlDigitada;
         }
 
-        paginaIncial.setText(urlDigitada);
+        paginaInicialCampo.setText(urlDigitada);
 
         // salva a página inicial
         try {

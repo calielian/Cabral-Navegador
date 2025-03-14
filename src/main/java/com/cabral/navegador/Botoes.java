@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 
 import com.equo.chromium.ChromiumBrowser;
 
-public class Botoes extends JButton {
+public class Botoes {
 
     // cria os ícones dos botões
     private static ImageIcon botaoProximoIcon = new ImageIcon(Botoes.class.getResource("/assets/botaoProximo.png"));
@@ -18,14 +18,14 @@ public class Botoes extends JButton {
     private static ImageIcon naoFavorito = new ImageIcon(Botoes.class.getResource("/assets/naoFavorito.png"));
     private static ImageIcon favorito = new ImageIcon(Botoes.class.getResource("/assets/favorito.png"));
     private static ImageIcon botaoRecarregarIcon = new ImageIcon(Botoes.class.getResource("/assets/botaoRecarregar.png"));
-    private static ImageIcon botaoConfigIcon = new ImageIcon(Botoes.class.getResource("/assets/botaoConfig.png"));
+    private static ImageIcon botaoExtraIcon = new ImageIcon(Botoes.class.getResource("/assets/botaoConfig.png"));
 
     // cria os botões e define a cor padrão deles
     private static JButton botaoPrevio = new JButton();
     private static JButton botaoProximo = new JButton();
     private static JButton botaoFavoritos = new JButton();
     private static JButton botaoRecarregar = new JButton();
-    private static JButton botaoConfig = new JButton();
+    private static JButton botaoExtras = new JButton();
     private static final Color corBotao = Color.LIGHT_GRAY;
 
     // cria variáveis e uma constante que são necessárias para o uso do programa
@@ -73,14 +73,13 @@ public class Botoes extends JButton {
         return botaoRecarregar;
     }
 
-    public static JButton pegarBotaoConfig(int altura){
-        botaoConfig.setPreferredSize(new Dimension(LARGURA, altura));
-        botaoConfig.setBackground(corBotao);
-        botaoConfig.setIcon(botaoConfigIcon);
-        botaoConfig.setFocusable(false);
-        botaoConfig.addActionListener(e -> botaoSelecionado(e));
+    public static JButton pegarBotaoExtras(int altura){
+        botaoExtras.setPreferredSize(new Dimension(LARGURA, altura));
+        botaoExtras.setBackground(corBotao);
+        botaoExtras.setIcon(botaoExtraIcon);
+        botaoExtras.setFocusable(false);
 
-        return botaoConfig;
+        return botaoExtras;
     }
 
     // função que entrega a cor dos botões
@@ -118,13 +117,10 @@ public class Botoes extends JButton {
 
             TratamentoURL.adicionarFavorito(browser);
             definirIconeBotaoFavoritos(true);
+
         } else if (evento.getSource() == botaoRecarregar){
 
             browser.reload();
-
-        } else if (evento.getSource() == botaoConfig){
-
-            new JanelaConfig();
 
         }
     }
