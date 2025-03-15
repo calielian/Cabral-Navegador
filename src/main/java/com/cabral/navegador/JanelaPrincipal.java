@@ -61,19 +61,25 @@ public class JanelaPrincipal extends JFrame {
         
         // cria e configura a barra de URL
         JTextField barraURL = new JTextField();
-        barraURL.setBorder(null);
-        barraURL.setBackground(Botoes.pegarCorBotao());
 
-        // cria e configura o painel de abas
+        // cria e configura o painel de abas e a primeira aba
         JPanel painelAba = new JPanel();
         painelAba.setLayout(new BoxLayout(painelAba, BoxLayout.X_AXIS));
 
+        JButton botao = new JButton("Aba 1");
+
+        TratamentoURL.linkAba.put("Aba 1", TratamentoURL.pegarPaginaInicial());
+        TratamentoURL.abaSelecionada = "1";
+
+        botao.addActionListener(e -> Botoes.alterarAba(botao));
+
+        painelAba.add(botao);
+
         // cria o painel de scroll
         JScrollPane abas = new JScrollPane(painelAba);
-        abas.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        abas.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         abas.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         abas.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 10));
-        abas.getHorizontalScrollBar().setBackground(Color.GRAY);
 
         // configura a barra de navegação (onde estará os botões e a barra de URL)
         barraNavegacao.setLayout(new BorderLayout());

@@ -1,5 +1,6 @@
 package com.cabral.navegador;
 
+import java.util.HashMap;
 import java.util.List;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,6 +11,9 @@ import java.nio.file.StandardOpenOption;
 import com.equo.chromium.ChromiumBrowser;
 
 public class TratamentoURL {
+
+    public static HashMap<String, String> linkAba = new HashMap<>();
+    public static String abaSelecionada;
 
     public static String pegarPaginaInicial(){
 

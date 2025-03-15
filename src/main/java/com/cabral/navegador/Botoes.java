@@ -1,6 +1,5 @@
 package com.cabral.navegador;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 
@@ -23,7 +22,7 @@ public class Botoes {
     private static ImageIcon botaoNovaAbaIcon = new ImageIcon(Botoes.class.getResource("/assets/adicionarAba.png"));
     private static ImageIcon botaoApagarAbaIcon = new ImageIcon(Botoes.class.getResource("/assets/apagarAba.png"));
 
-    // cria os botões e define a cor padrão deles
+    // cria os botões
     private static JButton botaoPrevio = new JButton();
     private static JButton botaoProximo = new JButton();
     private static JButton botaoFavoritos = new JButton();
@@ -31,7 +30,6 @@ public class Botoes {
     private static JButton botaoExtras = new JButton();
     private static JButton botaoNovaAba = new JButton();
     private static JButton botaoApagarAba = new JButton();
-    private static final Color corBotao = Color.LIGHT_GRAY;
 
     // cria variáveis e uma constante que são necessárias para o uso do programa
     public static ChromiumBrowser browser;
@@ -42,7 +40,6 @@ public class Botoes {
     // as funções abaixo configuram e entregam os botões
     public static JButton pegarBotaoPrevio(int altura){
         botaoPrevio.setPreferredSize(new Dimension(LARGURA, altura));
-        botaoPrevio.setBackground(corBotao);
         botaoPrevio.setIcon(botaoPrevioIcon);
         botaoPrevio.setFocusable(false);
         botaoPrevio.addActionListener(e -> botaoSelecionado(e));
@@ -52,7 +49,6 @@ public class Botoes {
 
     public static JButton pegarBotaoProximo(int altura){
         botaoProximo.setPreferredSize(new Dimension(LARGURA, altura));
-        botaoProximo.setBackground(corBotao);
         botaoProximo.setIcon(botaoProximoIcon);
         botaoProximo.setFocusable(false);
         botaoProximo.addActionListener(e -> botaoSelecionado(e));
@@ -62,7 +58,6 @@ public class Botoes {
 
     public static JButton pegarBotaoFavoritos(int altura){
         botaoFavoritos.setPreferredSize(new Dimension(LARGURA, altura));
-        botaoFavoritos.setBackground(corBotao);
         botaoFavoritos.setFocusable(false);
         botaoFavoritos.addActionListener(e -> botaoSelecionado(e));
 
@@ -71,7 +66,6 @@ public class Botoes {
 
     public static JButton pegarBotaoRecarregar(int altura){
         botaoRecarregar.setPreferredSize(new Dimension(LARGURA, altura));
-        botaoRecarregar.setBackground(corBotao);
         botaoRecarregar.setIcon(botaoRecarregarIcon);
         botaoRecarregar.setFocusable(false);
         botaoRecarregar.addActionListener(e -> botaoSelecionado(e));
@@ -81,7 +75,6 @@ public class Botoes {
 
     public static JButton pegarBotaoExtras(int altura){
         botaoExtras.setPreferredSize(new Dimension(LARGURA, altura));
-        botaoExtras.setBackground(corBotao);
         botaoExtras.setIcon(botaoExtraIcon);
         botaoExtras.setFocusable(false);
 
@@ -90,29 +83,21 @@ public class Botoes {
 
     public static JButton pegarBotaoNovaAba(int altura){
         botaoNovaAba.setPreferredSize(new Dimension(LARGURA, altura));
-        botaoNovaAba.setBackground(corBotao);
         botaoNovaAba.setIcon(botaoNovaAbaIcon);
         botaoNovaAba.setFocusable(false);
-        botaoNovaAba.addActionListener(e -> botaoSelecionado(e));
+        botaoNovaAba.addActionListener(e -> criarAba());
 
         return botaoNovaAba;
     }
 
     public static JButton pegarBotaoApagarAba(int altura){
         botaoApagarAba.setPreferredSize(new Dimension(LARGURA, altura));
-        botaoApagarAba.setBackground(corBotao);
         botaoApagarAba.setIcon(botaoApagarAbaIcon);
         botaoApagarAba.setFocusable(false);
         botaoApagarAba.addActionListener(e -> botaoSelecionado(e));
 
         return botaoApagarAba;
     }
-
-    // função que entrega a cor dos botões
-    public static Color pegarCorBotao(){
-        return corBotao;
-    }
-
     // as duas funções abaixo define o ícone do botão de favoritos
     public static void definirIconeBotaoFavoritos(String link){
         botaoFavoritos.setIcon(TratamentoURL.verificarSeEFavorito(link) ? favorito : naoFavorito);
@@ -149,12 +134,6 @@ public class Botoes {
             browser.reload();
             definirIconeBotaoFavoritos(barraURL.getText());
 
-        } else if (evento.getSource() == botaoNovaAba){
-
-            painelAbas.add(new JButton("Nova aba"));
-            painelAbas.revalidate();
-            painelAbas.repaint();
-
         } else if (evento.getSource() == botaoApagarAba){
 
             System.out.println("Remover");
@@ -169,5 +148,28 @@ public class Botoes {
         } catch (InterruptedException e) {
             System.err.println(e);
         }
+    }
+
+    private static void criarAba(){
+        JButton botao = new JButton(String.format("Aba %d", painelAbas.getComponentCount() + 1));
+
+        TratamentoURL.linkAba.put(botao.getText(), TratamentoURL.pegarPaginaInicial());
+        TratamentoURL.abaSelecionada = botao.getText().split("Aba ")[1];
+
+        botao.addActionListener(e -> alterarAba(botao));
+
+        painelAbas.add(botao);
+        painelAbas.revalidate();
+        painelAbas.repaint();
+    }
+
+    public static void alterarAba(JButton botao){
+
+        TratamentoURL.linkAba.put(String.format("Aba %d", Integer.parseInt(TratamentoURL.abaSelecionada)), browser.getUrl());
+
+        TratamentoURL.abaSelecionada = botao.getText().split("Aba ")[1];
+
+        browser.setUrl(TratamentoURL.linkAba.get(botao.getText()));
+        barraURL.setText(TratamentoURL.linkAba.get(botao.getText()));
     }
 }

@@ -1,6 +1,5 @@
 package com.cabral.navegador;
 
-import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.ImageIcon;
@@ -30,9 +29,7 @@ public class JanelaFavoritos extends JFrame{
 
         JScrollPane painel = new JScrollPane(listaFavoritos);
         painel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        painel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        painel.getVerticalScrollBar().setForeground(Color.RED);
-        painel.getVerticalScrollBar().setBackground(Color.BLUE);
+        painel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 
         this.add(painel);
         this.setLocationRelativeTo(null);
