@@ -3,27 +3,32 @@ package com.cabral.navegador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import com.equo.chromium.ChromiumBrowser;
 
 public class JanelaPrincipal extends JFrame {
 
-    private final int TAMANHO_BARRA_NAVEGACAO = 35;
+    private final int TAMANHO_BARRA_NAVEGACAO = 70;
+    private final int TAMANHO_BOTOES = 35;
 
     // menu popup
     private JPopupMenu menu = new JPopupMenu();
 
     // botão para abrir o popup menu
-    private JButton botaoExtras = Botoes.pegarBotaoExtras(TAMANHO_BARRA_NAVEGACAO);
+    private JButton botaoExtras = Botoes.pegarBotaoExtras(TAMANHO_BOTOES);
 
     JanelaPrincipal(){
 
@@ -43,6 +48,9 @@ public class JanelaPrincipal extends JFrame {
         JPanel visualizadorSite = new JPanel();
         JPanel botoesNavegacao = new JPanel();
         JPanel botoesFavConfig = new JPanel();
+        JPanel botoesAba = new JPanel();
+        JPanel gerenciamentoAbas = new JPanel();
+        JTabbedPane abas = new JTabbedPane();
 
         // cria os itens do menu popup
         JMenuItem configuracoes = new JMenuItem("Configurações");
@@ -59,6 +67,8 @@ public class JanelaPrincipal extends JFrame {
         barraURL.setBorder(null);
         barraURL.setBackground(Botoes.pegarCorBotao());
 
+        abas.addTab("Nova aba", new JLabel());
+
         // configura a barra de navegação (onde estará os botões e a barra de URL)
         barraNavegacao.setLayout(new BorderLayout());
         barraNavegacao.setPreferredSize(new Dimension(0, TAMANHO_BARRA_NAVEGACAO));
@@ -71,23 +81,38 @@ public class JanelaPrincipal extends JFrame {
 
         // configura o painel onde estará os botões de navegação
         botoesNavegacao.setLayout(new BorderLayout());
-        botoesNavegacao.setPreferredSize(new Dimension(Botoes.LARGURA * 3, TAMANHO_BARRA_NAVEGACAO));
+        botoesNavegacao.setPreferredSize(new Dimension(Botoes.LARGURA * 3, TAMANHO_BOTOES));
 
         // define o painel onde estará os botões de faboritos e configurações
         botoesFavConfig.setLayout(new BorderLayout());
-        botoesFavConfig.setPreferredSize(new Dimension(Botoes.LARGURA * 2, TAMANHO_BARRA_NAVEGACAO));
+        botoesFavConfig.setPreferredSize(new Dimension(Botoes.LARGURA * 2, TAMANHO_BOTOES));
+
+        // define o painel onde estára os botões de gerenciamento de aba
+        botoesAba.setLayout(new BorderLayout());
+        botoesAba.setPreferredSize(new Dimension(Botoes.LARGURA * 2, TAMANHO_BOTOES));
+
+        // define o painel onde estará as abas
+        gerenciamentoAbas.setLayout(new BorderLayout());
+        gerenciamentoAbas.setPreferredSize(new Dimension(0, TAMANHO_BOTOES));
 
         // os comandos abaixo adicionam os botões e componentes em seus respectivos painéis
-        botoesNavegacao.add(Botoes.pegarBotaoPrevio(TAMANHO_BARRA_NAVEGACAO), BorderLayout.WEST);
-        botoesNavegacao.add(Botoes.pegarBotaoProximo(TAMANHO_BARRA_NAVEGACAO), BorderLayout.CENTER);
-        botoesNavegacao.add(Botoes.pegarBotaoRecarregar(TAMANHO_BARRA_NAVEGACAO), BorderLayout.EAST);
+        botoesNavegacao.add(Botoes.pegarBotaoPrevio(TAMANHO_BOTOES), BorderLayout.WEST);
+        botoesNavegacao.add(Botoes.pegarBotaoProximo(TAMANHO_BOTOES), BorderLayout.CENTER);
+        botoesNavegacao.add(Botoes.pegarBotaoRecarregar(TAMANHO_BOTOES), BorderLayout.EAST);
 
-        botoesFavConfig.add(Botoes.pegarBotaoFavoritos(TAMANHO_BARRA_NAVEGACAO), BorderLayout.WEST);
+        botoesFavConfig.add(Botoes.pegarBotaoFavoritos(TAMANHO_BOTOES), BorderLayout.WEST);
         botoesFavConfig.add(botaoExtras, BorderLayout.EAST);
 
         barraNavegacao.add(botoesNavegacao, BorderLayout.WEST);
         barraNavegacao.add(botoesFavConfig, BorderLayout.EAST);
         barraNavegacao.add(barraURL, BorderLayout.CENTER);
+        barraNavegacao.add(gerenciamentoAbas, BorderLayout.SOUTH);
+
+        botoesAba.add(Botoes.pegarBotaoNovaAba(TAMANHO_BOTOES), BorderLayout.WEST);
+        botoesAba.add(Botoes.pegarBotaoApagarAba(TAMANHO_BOTOES), BorderLayout.EAST);
+
+        gerenciamentoAbas.add(abas, BorderLayout.CENTER);
+        gerenciamentoAbas.add(botoesAba, BorderLayout.EAST);
 
         menu.add(configuracoes);
         menu.add(favoritos);
@@ -98,9 +123,10 @@ public class JanelaPrincipal extends JFrame {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
 
-        // entrega as instâncias da barra de URL e do navegador
+        // entrega as instâncias da barra de URL, do navegador e das abas
         Botoes.browser = browser;
         Botoes.barraURL = barraURL;
+        Botoes.aba = abas;
         JanelaFavoritos.barraUrl = barraURL;
         JanelaFavoritos.browser = browser;
 

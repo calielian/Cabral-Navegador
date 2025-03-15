@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import com.equo.chromium.ChromiumBrowser;
@@ -26,12 +28,15 @@ public class Botoes {
     private static JButton botaoFavoritos = new JButton();
     private static JButton botaoRecarregar = new JButton();
     private static JButton botaoExtras = new JButton();
+    private static JButton botaoNovaAba = new JButton();
+    private static JButton botaoApagarAba = new JButton();
     private static final Color corBotao = Color.LIGHT_GRAY;
 
     // cria variáveis e uma constante que são necessárias para o uso do programa
     public static ChromiumBrowser browser;
     public static JTextField barraURL;
     public static final int LARGURA = 50;
+    public static JTabbedPane aba;
 
     // as funções abaixo configuram e entregam os botões
     public static JButton pegarBotaoPrevio(int altura){
@@ -82,6 +87,24 @@ public class Botoes {
         return botaoExtras;
     }
 
+    public static JButton pegarBotaoNovaAba(int altura){
+        botaoNovaAba.setPreferredSize(new Dimension(LARGURA, altura));
+        botaoNovaAba.setBackground(corBotao);
+        botaoNovaAba.setFocusable(false);
+        botaoNovaAba.addActionListener(e -> botaoSelecionado(e));
+
+        return botaoNovaAba;
+    }
+
+    public static JButton pegarBotaoApagarAba(int altura){
+        botaoApagarAba.setPreferredSize(new Dimension(LARGURA, altura));
+        botaoApagarAba.setBackground(corBotao);
+        botaoApagarAba.setFocusable(false);
+        botaoApagarAba.addActionListener(e -> botaoSelecionado(e));
+
+        return botaoApagarAba;
+    }
+
     // função que entrega a cor dos botões
     public static Color pegarCorBotao(){
         return corBotao;
@@ -121,6 +144,15 @@ public class Botoes {
         } else if (evento.getSource() == botaoRecarregar){
 
             browser.reload();
+            definirIconeBotaoFavoritos(barraURL.getText());
+
+        } else if (evento.getSource() == botaoNovaAba){
+
+            aba.addTab("Nova aba", new JLabel());
+
+        } else if (evento.getSource() == botaoApagarAba){
+
+            aba.remove(aba.getSelectedIndex());
 
         }
     }
