@@ -3,18 +3,16 @@ package com.cabral.navegador;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JTabbedPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.equo.chromium.ChromiumBrowser;
@@ -50,7 +48,6 @@ public class JanelaPrincipal extends JFrame {
         JPanel botoesFavConfig = new JPanel();
         JPanel botoesAba = new JPanel();
         JPanel gerenciamentoAbas = new JPanel();
-        JTabbedPane abas = new JTabbedPane();
 
         // cria os itens do menu popup
         JMenuItem configuracoes = new JMenuItem("Configurações");
@@ -67,19 +64,28 @@ public class JanelaPrincipal extends JFrame {
         barraURL.setBorder(null);
         barraURL.setBackground(Botoes.pegarCorBotao());
 
-        abas.addTab("Nova aba", new JLabel());
+        // cria e configura o painel de abas
+        JPanel painelAba = new JPanel();
+        painelAba.setLayout(new BoxLayout(painelAba, BoxLayout.X_AXIS));
+
+        // cria o painel de scroll
+        JScrollPane abas = new JScrollPane(painelAba);
+        abas.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        abas.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        abas.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 10));
+        abas.getHorizontalScrollBar().setBackground(Color.GRAY);
 
         // configura a barra de navegação (onde estará os botões e a barra de URL)
         barraNavegacao.setLayout(new BorderLayout());
         barraNavegacao.setPreferredSize(new Dimension(0, TAMANHO_BARRA_NAVEGACAO));
         barraNavegacao.setBackground(Color.LIGHT_GRAY);
 
-        // cria o visualizador do site (onde a página web será exibida), cria a instância do navegador e define a ação da barra de URL
+        // define o visualizador do site (onde a página web será exibida), cria a instância do navegador e define a ação da barra de URL
         visualizadorSite.setLayout(new BorderLayout());
         ChromiumBrowser browser = ChromiumBrowser.swing(visualizadorSite,BorderLayout.CENTER, TratamentoURL.pegarPaginaInicial());
         barraURL.addActionListener(e -> irParaNovoURL(barraURL.getText(), browser, barraURL));
 
-        // configura o painel onde estará os botões de navegação
+        // define o painel onde estará os botões de navegação
         botoesNavegacao.setLayout(new BorderLayout());
         botoesNavegacao.setPreferredSize(new Dimension(Botoes.LARGURA * 3, TAMANHO_BOTOES));
 
@@ -94,6 +100,7 @@ public class JanelaPrincipal extends JFrame {
         // define o painel onde estará as abas
         gerenciamentoAbas.setLayout(new BorderLayout());
         gerenciamentoAbas.setPreferredSize(new Dimension(0, TAMANHO_BOTOES));
+        gerenciamentoAbas.setBackground(Color.LIGHT_GRAY);
 
         // os comandos abaixo adicionam os botões e componentes em seus respectivos painéis
         botoesNavegacao.add(Botoes.pegarBotaoPrevio(TAMANHO_BOTOES), BorderLayout.WEST);
@@ -126,7 +133,7 @@ public class JanelaPrincipal extends JFrame {
         // entrega as instâncias da barra de URL, do navegador e das abas
         Botoes.browser = browser;
         Botoes.barraURL = barraURL;
-        Botoes.aba = abas;
+        Botoes.painelAbas = painelAba;
         JanelaFavoritos.barraUrl = barraURL;
         JanelaFavoritos.browser = browser;
 

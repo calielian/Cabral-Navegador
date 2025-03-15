@@ -102,4 +102,35 @@ public class TratamentoURL {
         }
     }
 
+    public static boolean apagarFavorito(String link){
+
+        // remove 1 favorito em específico
+        List<String> listaFavoritosArquivo;
+        List<String> listaFavoritos = List.of();
+        try {
+            Path caminhoArquivoFav = Paths.get(System.getProperty("user.home"), Main.NOME_PASTA_CONFIG, Main.NOME_ARQUIVO_FAVORITOS);
+
+            listaFavoritosArquivo = Files.readAllLines(caminhoArquivoFav);
+
+            for (String favorito : listaFavoritosArquivo){
+
+                if (favorito == link){
+                    continue;
+                }
+
+                listaFavoritos.add(favorito);
+            }
+
+            Files.write(caminhoArquivoFav, listaFavoritos, StandardOpenOption.WRITE);
+
+            System.out.println("Favorito removido com sucesso!");
+            return true;
+
+        } catch (IOException e) {
+            System.err.println("Não foi possível apagar o favorito\n" + e);
+            return false;
+        }
+
+    }
+
 }

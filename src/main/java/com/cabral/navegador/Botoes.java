@@ -6,8 +6,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JTabbedPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.equo.chromium.ChromiumBrowser;
@@ -20,7 +19,9 @@ public class Botoes {
     private static ImageIcon naoFavorito = new ImageIcon(Botoes.class.getResource("/assets/naoFavorito.png"));
     private static ImageIcon favorito = new ImageIcon(Botoes.class.getResource("/assets/favorito.png"));
     private static ImageIcon botaoRecarregarIcon = new ImageIcon(Botoes.class.getResource("/assets/botaoRecarregar.png"));
-    private static ImageIcon botaoExtraIcon = new ImageIcon(Botoes.class.getResource("/assets/botaoConfig.png"));
+    private static ImageIcon botaoExtraIcon = new ImageIcon(Botoes.class.getResource("/assets/botaoExtra.png"));
+    private static ImageIcon botaoNovaAbaIcon = new ImageIcon(Botoes.class.getResource("/assets/adicionarAba.png"));
+    private static ImageIcon botaoApagarAbaIcon = new ImageIcon(Botoes.class.getResource("/assets/apagarAba.png"));
 
     // cria os botões e define a cor padrão deles
     private static JButton botaoPrevio = new JButton();
@@ -36,7 +37,7 @@ public class Botoes {
     public static ChromiumBrowser browser;
     public static JTextField barraURL;
     public static final int LARGURA = 50;
-    public static JTabbedPane aba;
+    public static JPanel painelAbas;
 
     // as funções abaixo configuram e entregam os botões
     public static JButton pegarBotaoPrevio(int altura){
@@ -90,6 +91,7 @@ public class Botoes {
     public static JButton pegarBotaoNovaAba(int altura){
         botaoNovaAba.setPreferredSize(new Dimension(LARGURA, altura));
         botaoNovaAba.setBackground(corBotao);
+        botaoNovaAba.setIcon(botaoNovaAbaIcon);
         botaoNovaAba.setFocusable(false);
         botaoNovaAba.addActionListener(e -> botaoSelecionado(e));
 
@@ -99,6 +101,7 @@ public class Botoes {
     public static JButton pegarBotaoApagarAba(int altura){
         botaoApagarAba.setPreferredSize(new Dimension(LARGURA, altura));
         botaoApagarAba.setBackground(corBotao);
+        botaoApagarAba.setIcon(botaoApagarAbaIcon);
         botaoApagarAba.setFocusable(false);
         botaoApagarAba.addActionListener(e -> botaoSelecionado(e));
 
@@ -148,11 +151,13 @@ public class Botoes {
 
         } else if (evento.getSource() == botaoNovaAba){
 
-            aba.addTab("Nova aba", new JLabel());
+            painelAbas.add(new JButton("Nova aba"));
+            painelAbas.revalidate();
+            painelAbas.repaint();
 
         } else if (evento.getSource() == botaoApagarAba){
 
-            aba.remove(aba.getSelectedIndex());
+            System.out.println("Remover");
 
         }
     }

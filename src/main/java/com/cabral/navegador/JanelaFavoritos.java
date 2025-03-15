@@ -1,11 +1,13 @@
 package com.cabral.navegador;
 
+import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import com.equo.chromium.ChromiumBrowser;
@@ -26,19 +28,25 @@ public class JanelaFavoritos extends JFrame{
 
         listaFavoritos.addListSelectionListener(e -> irParaFavorito());
 
-        this.add(listaFavoritos);
+        JScrollPane painel = new JScrollPane(listaFavoritos);
+        painel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        painel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        painel.getVerticalScrollBar().setForeground(Color.RED);
+        painel.getVerticalScrollBar().setBackground(Color.BLUE);
+
+        this.add(painel);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
     private void irParaFavorito(){
-        Object[] opcoes = {"Sim", "Não"};
+        Object[] opcoes = {"Ir para a página", "Apagar", "Nada"};
 
         int escolha = JOptionPane.showOptionDialog(
             null, // componente pai (null centraliza)
-            String.format("Deseja selecionar '%s'?", listaFavoritos.getSelectedValue()), // conteúdo a mostrar
+            String.format("O que deseja fazer com '%s'?", listaFavoritos.getSelectedValue()), // conteúdo a mostrar
             "Confirmação", // título
-            JOptionPane.YES_NO_OPTION, // tipo de opções
+            JOptionPane.YES_NO_CANCEL_OPTION, // tipo de opções
             JOptionPane.QUESTION_MESSAGE, // tipo de mensagem
             new ImageIcon(getClass().getResource("/assets/navegadorMini.png")), // ícone personalizado
             opcoes, // lista de opções
@@ -50,6 +58,12 @@ public class JanelaFavoritos extends JFrame{
                 browser.setUrl(listaFavoritos.getSelectedValue());
                 barraUrl.setText(listaFavoritos.getSelectedValue());
                 Botoes.definirIconeBotaoFavoritos(listaFavoritos.getSelectedValue());
+                break;
+            case JOptionPane.NO_OPTION:
+
+                if (TratamentoURL.apagarFavorito(listaFavoritos.getSelectedValue())){
+                    listaFavoritos.remove(listaFavoritos.getSelectedIndex());
+                }
                 break;
         }
     }

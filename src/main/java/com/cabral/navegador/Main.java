@@ -1,6 +1,7 @@
 package com.cabral.navegador;
 
 import java.util.List;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -38,10 +39,11 @@ public class Main {
             }
 
             System.out.println("Iniciando aplicativo...");
-
             new JanelaPrincipal();
         } catch (IOException e) {
             System.err.println("Erro ao criar a pasta\n" + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Erro\n" + e.getMessage());
         }
     }
 }
