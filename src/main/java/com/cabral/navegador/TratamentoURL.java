@@ -14,29 +14,8 @@ public class TratamentoURL {
 
     public static HashMap<String, String> linkAba = new HashMap<>();
     public static String abaSelecionada;
-
-    public static String pegarPaginaInicial(){
-
-        try {
-            // pega o caminho do arquivo de configuração
-            Path caminhoArquivoConfig = Paths.get(System.getProperty("user.home"), Main.NOME_PASTA_CONFIG, Main.NOME_ARQUIVO_CONFIGURACAO);
-
-            // cria uma lista de strings que contém todas as linhas lidas do arquivo
-            List<String> linhas = Files.readAllLines(caminhoArquivoConfig);
-
-            // itera pela lista e verifica se possui a linha relacionada a página inicial
-            for (String linha : linhas){
-                if (linha.contains("PAG_INICIAL=")){
-                    return linha.split("PAG_INICIAL=")[1];
-                }
-            }
-
-            return "https://www.google.com/";
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            return "";
-        }
-    }
+    
+    public static String pagina_inicial = "about:blank";
 
     public static boolean verificarSeEFavorito(String link){
 
@@ -110,23 +89,11 @@ public class TratamentoURL {
 
         // remove 1 favorito em específico
         List<String> listaFavoritosArquivo;
-        List<String> listaFavoritos = List.of();
         try {
             Path caminhoArquivoFav = Paths.get(System.getProperty("user.home"), Main.NOME_PASTA_CONFIG, Main.NOME_ARQUIVO_FAVORITOS);
-
             listaFavoritosArquivo = Files.readAllLines(caminhoArquivoFav);
-
-            for (String favorito : listaFavoritosArquivo){
-
-                if (favorito == link){
-                    continue;
-                }
-
-                listaFavoritos.add(favorito);
-            }
-
-            Files.write(caminhoArquivoFav, listaFavoritos, StandardOpenOption.WRITE);
-
+            listaFavoritosArquivo.remove(link);
+            Files.write(caminhoArquivoFav, listaFavoritosArquivo);
             System.out.println("Favorito removido com sucesso!");
             return true;
 
@@ -135,6 +102,11 @@ public class TratamentoURL {
             return false;
         }
 
+    }
+
+
+    public static String pegarPaginaInicial(){
+        return (pagina_inicial.startsWith("file:") ? "" : pagina_inicial);
     }
 
 }

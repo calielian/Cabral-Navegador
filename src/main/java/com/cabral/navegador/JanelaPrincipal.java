@@ -1,7 +1,6 @@
 package com.cabral.navegador;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 
@@ -68,12 +67,15 @@ public class JanelaPrincipal extends JFrame {
 
         JButton botao = new JButton("Aba 1");
 
-        TratamentoURL.linkAba.put("Aba 1", TratamentoURL.pegarPaginaInicial());
+        TratamentoURL.linkAba.put("Aba 1", TratamentoURL.pagina_inicial);
         TratamentoURL.abaSelecionada = "1";
 
         botao.addActionListener(e -> Botoes.alterarAba(botao));
+        botao.setName(botao.getText());
 
         painelAba.add(botao);
+        Botoes.botoes[0] = botao;
+        Botoes.mapaBotoes.put(botao.getName(), 1);
 
         // cria o painel de scroll
         JScrollPane abas = new JScrollPane(painelAba);
@@ -84,11 +86,10 @@ public class JanelaPrincipal extends JFrame {
         // configura a barra de navegação (onde estará os botões e a barra de URL)
         barraNavegacao.setLayout(new BorderLayout());
         barraNavegacao.setPreferredSize(new Dimension(0, TAMANHO_BARRA_NAVEGACAO));
-        barraNavegacao.setBackground(Color.LIGHT_GRAY);
 
         // define o visualizador do site (onde a página web será exibida), cria a instância do navegador e define a ação da barra de URL
         visualizadorSite.setLayout(new BorderLayout());
-        ChromiumBrowser browser = ChromiumBrowser.swing(visualizadorSite,BorderLayout.CENTER, TratamentoURL.pegarPaginaInicial());
+        ChromiumBrowser browser = ChromiumBrowser.swing(visualizadorSite,BorderLayout.CENTER, TratamentoURL.pagina_inicial);
         barraURL.addActionListener(e -> irParaNovoURL(barraURL.getText(), browser, barraURL));
 
         // define o painel onde estará os botões de navegação
@@ -106,7 +107,6 @@ public class JanelaPrincipal extends JFrame {
         // define o painel onde estará as abas
         gerenciamentoAbas.setLayout(new BorderLayout());
         gerenciamentoAbas.setPreferredSize(new Dimension(0, TAMANHO_BOTOES));
-        gerenciamentoAbas.setBackground(Color.LIGHT_GRAY);
 
         // os comandos abaixo adicionam os botões e componentes em seus respectivos painéis
         botoesNavegacao.add(Botoes.pegarBotaoPrevio(TAMANHO_BOTOES), BorderLayout.WEST);
@@ -159,6 +159,7 @@ public class JanelaPrincipal extends JFrame {
             System.err.println(e);
         }
         barraURL.setText(browser.getUrl());
+        TratamentoURL.linkAba.put("Aba " + TratamentoURL.abaSelecionada, browser.getUrl());
 
         Botoes.definirIconeBotaoFavoritos(barraURL.getText());
     }

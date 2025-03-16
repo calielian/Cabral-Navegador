@@ -1,7 +1,6 @@
 package com.cabral.navegador;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,6 +42,8 @@ public class JanelaConfig extends JFrame {
         paginaInicialCampo.setMaximumSize(new Dimension(this.getWidth(), 20)); // tamanho máximo para garantir que fique na mesma linha
         paginaInicialCampo.addActionListener(e -> definirPaginaInicial(paginaInicialCampo));
 
+        paginaInicialCampo.setText( ((TratamentoURL.pagina_inicial).startsWith("file:") ? "" : TratamentoURL.pagina_inicial) );
+
         // cria e configura o painel onde estará as configurações relacionadas a página inicial
         JPanel paginaInicialPanel = new JPanel();
         paginaInicialPanel.setLayout(new BoxLayout(paginaInicialPanel, BoxLayout.X_AXIS));
@@ -59,7 +60,12 @@ public class JanelaConfig extends JFrame {
         temaClaro.addActionListener(e -> definirTema(temaClaro));
         temaEscuro.addActionListener(e -> definirTema(temaEscuro));
 
-        temaClaro.setSelected(true);
+        if (Main.tema.equals("claro")) {
+            temaClaro.setSelected(true);
+        } else {
+            temaEscuro.setSelected(true);
+        }
+
         temaBotoes.add(temaClaro);
         temaBotoes.add(temaEscuro);
 
@@ -108,31 +114,22 @@ public class JanelaConfig extends JFrame {
         // salva a página inicial
         try {
             Path caminhoArquivoConfig = Paths.get(System.getProperty("user.home"), Main.NOME_PASTA_CONFIG, Main.NOME_ARQUIVO_CONFIGURACAO);
-            List<String> url = List.of("PAG_INICIAL=" + urlDigitada);
+            String url = "PAG_INICIAL=" + urlDigitada;
 
             List<String> arquivoConfig = Files.readAllLines(caminhoArquivoConfig);
-            List<String> novoArquivoConfig = List.of();
-
-            for (String linha : arquivoConfig){
-                if (linha.startsWith("PAG_INICIAL=")) {
-                    novoArquivoConfig.add(url.get(0));
-                } else {
-                    novoArquivoConfig.add(linha);
-                }
-            }
-
-            if (!novoArquivoConfig.contains("PAG_INICIAL")){
-                novoArquivoConfig.add(url.get(0));
-            }
-
-            Files.write(caminhoArquivoConfig, novoArquivoConfig);
+            arquivoConfig.remove(0);
+            arquivoConfig.add(0, url);
+            Files.write(caminhoArquivoConfig, arquivoConfig);
         } catch (IOException e) {
             System.err.println("Não foi possível definir a página inicial\n" + e.getMessage());
         }
 
     }
 
+    // função para definir o tema
     private void definirTema(JRadioButton temaEscolhido){
+
+        // define o tema de acordo com a seleção do usuário
         switch (temaEscolhido.getText()) {
             case "Claro":
                 Main.tema = "claro";
@@ -145,31 +142,18 @@ public class JanelaConfig extends JFrame {
                 break;
         }
 
-        System.out.println("DHuisfhiudahgfsdgsgrrgf");
-
+        // adiciona a seleção pro arquivo de configuração
         try {
             Path caminhoArquivoConfig = Paths.get(System.getProperty("user.home"), Main.NOME_PASTA_CONFIG, Main.NOME_ARQUIVO_CONFIGURACAO);
-            List<String> tema = List.of("TEMA=" + Main.tema);
+            String tema = "TEMA=" + Main.tema;
 
             List<String> arquivoConfig = Files.readAllLines(caminhoArquivoConfig);
-            List<String> novoArquivoConfig = List.of();
+            arquivoConfig.remove(1);
+            arquivoConfig.add(1, tema);
+            Files.write(caminhoArquivoConfig, arquivoConfig);
 
-            for (String linha : arquivoConfig){
-                if (linha.startsWith("TEMA=")) {
-                    novoArquivoConfig.add(tema.get(0));
-                } else {
-                    novoArquivoConfig.add(linha);
-                }
-            }
-
-            if (!novoArquivoConfig.contains("TEMA=")){
-                novoArquivoConfig.add(tema.get(0));
-            }
-
-            Files.write(caminhoArquivoConfig, novoArquivoConfig);
-
-        } catch (Exception e) {
-            // TODO: handle exception
+        } catch (IOException e) {
+            System.err.println("Erro ao ler/gravar arquivo de configuração\n" + e.getMessage());
         }
 
     }
