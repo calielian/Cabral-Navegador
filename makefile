@@ -1,5 +1,5 @@
 # Defina o nome do JAR gerado
-JAR_NAME = cabralnavegador-1.0.jar
+JAR_NAME = cabralnavegador-*.jar
 
 # Comando padrão (executado quando você digita apenas "make")
 all: clean build run

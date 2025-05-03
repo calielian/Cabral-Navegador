@@ -9,6 +9,10 @@ Todos os ícones, com exceção da logo do aplicativo, foram retirados do [Boxic
 
 Como ferramenta de build do Java, foi utilizado o Apache Maven.
 
+O navegador possui um sistema de favoritos, configurações de tema claro ou escuro e também definição da tela inicial do navegador, que também já vem uma simples de fábrica.
+
+O navegador NÃO está muito polido, e dificilmente estará algum dia: a cada vez que é alterado um link, a barra de URL não altera automaticamente, as abas podem apresentar bugs ou mal-funcionamento, etc. Não sei como resolver.
+
 **Caso der erro, verifique se o Java, o Maven e o Make estão instalados no sistema e no seu PATH executando esses comandos:**
 
 ```java -version```<br>

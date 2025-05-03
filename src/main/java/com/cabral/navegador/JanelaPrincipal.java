@@ -67,7 +67,7 @@ public class JanelaPrincipal extends JFrame {
 
         JButton botao = new JButton("Aba 1");
 
-        TratamentoURL.linkAba.put("Aba 1", TratamentoURL.pagina_inicial);
+        TratamentoURL.linkAba.put("Aba 1", TratamentoURL.paginaInicial);
         TratamentoURL.abaSelecionada = "1";
 
         botao.addActionListener(e -> Botoes.alterarAba(botao));
@@ -89,7 +89,7 @@ public class JanelaPrincipal extends JFrame {
 
         // define o visualizador do site (onde a página web será exibida), cria a instância do navegador e define a ação da barra de URL
         visualizadorSite.setLayout(new BorderLayout());
-        ChromiumBrowser browser = ChromiumBrowser.swing(visualizadorSite,BorderLayout.CENTER, TratamentoURL.pagina_inicial);
+        ChromiumBrowser browser = ChromiumBrowser.swing(visualizadorSite,BorderLayout.CENTER, TratamentoURL.paginaInicial);
         barraURL.addActionListener(e -> irParaNovoURL(barraURL.getText(), browser, barraURL));
 
         // define o painel onde estará os botões de navegação

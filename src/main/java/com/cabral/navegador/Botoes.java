@@ -159,7 +159,7 @@ public class Botoes {
         if (painelAbas.getComponentCount() <= 100) {
             JButton botao = new JButton(String.format("Aba %d", painelAbas.getComponentCount() + 1)); // cria um botão
 
-            TratamentoURL.linkAba.put(botao.getText(), TratamentoURL.pagina_inicial); // adiciona ele no mapa de link de abas
+            TratamentoURL.linkAba.put(botao.getText(), TratamentoURL.paginaInicial); // adiciona ele no mapa de link de abas
             TratamentoURL.abaSelecionada = botao.getText().split("Aba ")[1]; // define como aba selecionada
 
             botao.addActionListener(e -> alterarAba(botao));
@@ -171,9 +171,9 @@ public class Botoes {
             painelAbas.revalidate();
             painelAbas.repaint();
 
-            browser.setUrl(TratamentoURL.pagina_inicial);
+            browser.setUrl(TratamentoURL.paginaInicial);
             barraURL.setText(TratamentoURL.pegarPaginaInicial());
-            TratamentoURL.linkAba.put(botao.getText(), TratamentoURL.pagina_inicial);
+            TratamentoURL.linkAba.put(botao.getText(), TratamentoURL.paginaInicial);
         }
     }
 

@@ -42,7 +42,7 @@ public class JanelaConfig extends JFrame {
         paginaInicialCampo.setMaximumSize(new Dimension(this.getWidth(), 20)); // tamanho máximo para garantir que fique na mesma linha
         paginaInicialCampo.addActionListener(e -> definirPaginaInicial(paginaInicialCampo));
 
-        paginaInicialCampo.setText( ((TratamentoURL.pagina_inicial).startsWith("file:") ? "" : TratamentoURL.pagina_inicial) );
+        paginaInicialCampo.setText( ((TratamentoURL.paginaInicial).startsWith("file:") ? "" : TratamentoURL.paginaInicial) );
 
         // cria e configura o painel onde estará as configurações relacionadas a página inicial
         JPanel paginaInicialPanel = new JPanel();
@@ -120,6 +120,8 @@ public class JanelaConfig extends JFrame {
             arquivoConfig.remove(0);
             arquivoConfig.add(0, url);
             Files.write(caminhoArquivoConfig, arquivoConfig);
+            Main.paginaInicial = url.split("PAG_INICIAL=")[1];
+            TratamentoURL.paginaInicial = url.split("PAG_INICIAL=")[1];
         } catch (IOException e) {
             System.err.println("Não foi possível definir a página inicial\n" + e.getMessage());
         }

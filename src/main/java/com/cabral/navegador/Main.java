@@ -20,7 +20,7 @@ public class Main {
     public static final String NOME_ARQUIVO_CONFIGURACAO = "config.cabral";
     public static final String NOME_ARQUIVO_FAVORITOS = "favoritos.cabral";
     public static String tema = "claro";
-    public static String pagina_inicial = "about:blank";
+    public static String paginaInicial = "about:blank";
     public static void main(String[] args) {
 
         // pega a pasta pessoal do usuário (independente do sistema)
@@ -31,7 +31,7 @@ public class Main {
         Path caminhoArquivoConfig = Paths.get(pastaUsuario, NOME_PASTA_CONFIG, NOME_ARQUIVO_CONFIGURACAO);
         Path caminhoArquivoFav = Paths.get(pastaUsuario, NOME_PASTA_CONFIG, NOME_ARQUIVO_FAVORITOS);
 
-        List<String> escrever = List.of("PAG_INICIAL=", "TEMA=claro");
+        List<String> escrever = List.of("PAG_INICIAL=null", "TEMA=claro");
         List<String> escreverFav = List.of("");
 
         try {
@@ -63,8 +63,9 @@ public class Main {
                 System.out.println("Arquivo de favoritos recriado com sucesso em: " + caminhoArquivoFav);
             }
 
-            // define o tema
+            // define o tema e pega a página inicial
             List<String> arquivoConfig = Files.readAllLines(caminhoArquivoConfig);
+            paginaInicial = arquivoConfig.get(0).split("PAG_INICIAL=")[1];
             tema = arquivoConfig.get(1).split("TEMA=")[1];
 
             if (tema.equals("claro")){
@@ -76,7 +77,7 @@ public class Main {
             try {
                 File arquivoHTML = transferirHTML();
     
-                TratamentoURL.pagina_inicial = arquivoHTML.toURI().toString();
+                TratamentoURL.paginaInicial = (paginaInicial.equals("null")) ? arquivoHTML.toURI().toString() : paginaInicial;
             } catch (Exception e) {
                 System.err.println("Erro ao inicializar a página inicial\n" + e.getMessage());
             }
@@ -87,7 +88,7 @@ public class Main {
         } catch (IOException e) {
             System.err.println("Erro ao criar a pasta\n" + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Erro\n" + e.getMessage());
+            System.out.println("Erro na inicialização do software\n" + e.getMessage());
         }
     }
 

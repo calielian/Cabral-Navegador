@@ -15,7 +15,7 @@ public class TratamentoURL {
     public static HashMap<String, String> linkAba = new HashMap<>();
     public static String abaSelecionada;
     
-    public static String pagina_inicial = "about:blank";
+    public static String paginaInicial = "about:blank";
 
     public static boolean verificarSeEFavorito(String link){
 
@@ -106,7 +106,7 @@ public class TratamentoURL {
 
 
     public static String pegarPaginaInicial(){
-        return (pagina_inicial.startsWith("file:") ? "" : pagina_inicial);
+        return (paginaInicial.startsWith("file:") ? "" : paginaInicial);
     }
 
 }
